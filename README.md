@@ -1,7 +1,7 @@
 # CMS
 Contact Management System
 
-## Project: Contact Management System In C++ With Source Code
+## Project: Contact Management System in `C++` with source code
 
 Contact Management System is based on the concept of recording contact details. This whole system is in the C++ language. Also, the user can perform all the tasks like adding, viewing, modifying, and deleting contact records. There’s no login system for this project.
 
