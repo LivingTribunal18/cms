@@ -15,9 +15,9 @@ This System makes easy to store records of each. Moreover, the user can add pers
 
 ## Features:
 
-- Add a new Contact
-- List all Contacts
-- Edit a Contact
-- Search for Contact
-- Delete a Contact
-- Exit
+- [1] Add a new Contact
+- [2] List all Contacts
+- [3] Edit a Contact
+- [4] Search for Contact
+- [5] Delete a Contact
+- [0] Exit
