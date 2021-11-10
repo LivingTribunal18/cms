@@ -9,7 +9,9 @@ This is a simple contact details management system which developed using C++. It
 
 ## About System
 
-The Contact Management System project is designed in `C++` language. This system is based on a concept to store and generate all the records of the Personal or an Organization’s Contact. Also, this program is considered as a simple database of contacts in an office, an organization where the user can add Contact details safely and it’s not time-consuming. This System makes easy to store records of each. Moreover, the user can add personal details, view a list of it, modify and remove the details. Also, this mini project contains a validation system for user actions while operationg with contacts.
+The Contact Management System project is designed in `C++` language. This system is based on a concept to store and generate all the records of the Personal or an Organization’s Contact. Also, this program is considered as a simple database of contacts in an office, an organization where the user can add Contact details safely and it’s not time-consuming. 
+
+This System makes easy to store records of each. Moreover, the user can add personal details, view a list of it, modify and remove the details. Also, this mini project contains a validation system for user actions while operationg with contacts.
 
 ## Features:
 
