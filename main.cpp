@@ -113,8 +113,9 @@ void addContact() {
 
     cout << "Enter the contacts details\n";
     cout << "Phone number (any country): +";
-    cin.ignore();
+    cin.ignore();// fixes premature end of input // cin adds “\n” to the buffer, because of this the execution may not be stopped for your input
     getline(cin, phone);
+
     while (!validationPhone(phone)) {
         cout << "\nEnter the phone using ONLY digits, CORRECT country code: +";
         cin.ignore();
@@ -125,44 +126,23 @@ void addContact() {
     getline(cin, name);
 
     cout << "Email:";
-    cin.ignore();
+//    cin.ignore();
     getline(cin, email);
+
     while (!validationEmail(email)) {
         cout << "\nEnter the email using correct format without spaces - instance@example.sample:";
         cin >> email;
     }
 
     cout << "Address:";
-    // fixes premature end of input
-    // cin adds “\n” to the buffer, because of this the execution may not be stopped for your input
-    cin.ignore();
+
+//    cin.ignore();
     getline(cin, address);
 
-    fullInfo += "==============================================================================\n";
-    fullInfo += "Phone: +" + phone + "\nFull Name: " + name + "\nEmail: " + email + "\nAddress: " + address;
-    fullInfo += "\n==============================================================================\n";
+    fullInfo += "Phone: +" + phone + "\nFull Name: " + name + "\nEmail: " + email + "\nAddress: " + address + "\n";
+    fullInfo += "==============================================================================";
     saveToFile(fullInfo);
 }
-
-void listContacts() {
-    string listContacts;
-    int lines = 0;
-    ifstream outfile;
-    outfile.open("contacts.txt", ios::in);
-
-    while (getline(outfile, listContacts)) {
-        lines++;
-        cout << listContacts << endl;
-    }
-
-    if (lines <= 0) {
-        cout << "No contacts found!\n";
-    }
-
-    outfile.close();
-}
-
-void editContact() {}
 
 void searchContact() {
     string phone;
@@ -197,27 +177,96 @@ void searchContact() {
     outfile.close();
 }
 
+
+void listContacts() {
+    string breakingPoint = "==============================================================================";
+    string listContacts;
+    int lines = 0;
+    ifstream outfile;
+    outfile.open("contacts.txt", ios::in);
+
+    while (getline(outfile, listContacts)) {
+        lines++;
+        cout << listContacts << endl;
+        if (listContacts == breakingPoint) {
+            cout << "\n";
+        }
+    }
+
+    if (lines <= 0) {
+        cout << "No contacts found!\n";
+    }
+
+    outfile.close();
+}
+
+void editContact() {
+    string phone;
+    string line, searchingNum = "Phone: +";
+    string breakingPoint = "==============================================================================";
+    bool found = false;
+
+    fstream outfile;
+    outfile.open("contacts.txt", ios::in | ios::out);
+
+    searchContact();
+//    deleteContact(contact);
+    addContact();
+
+// TODO deleting data of contact
+// TODO adding updated data of contact at the same line (or last)
+
+    while(getline(outfile, line) && found == false){
+        if(removeSpacesFromString(line) == removeSpacesFromString(searchingNum)){
+
+//            cont.create_contact();
+//            int pos = -1 * sizeof(cont);
+//            fp.seekp(pos,ios::cur);
+//            fp.write((char*)&cont,sizeof(cont));
+
+            cout << "\n Contact Successfully Updated...\n";
+            found = true;
+        }
+    }
+
+    if (found == false) {
+        cout << "\nContact Not Found...\n";
+    }
+    outfile.close();
+}
+
+
 void deleteContact() {
     string phone;
     string line, searchingNum = "Phone: +";
+    string breakingPoint = "==============================================================================";
+    bool found = false;
     fstream outfile;
     fstream outfile_tmp;
 
-    cout << "\nPlease enter the contact phone number #: +";
+    cout << "\nPlease enter the contact phone number: +";
     cin.ignore();
     getline(cin, phone);
     searchingNum += phone;
 
     outfile.open("contacts.txt", ios::in | ios::out);
     outfile_tmp.open("contacts_tmp.txt", ios::out);
+
     while (getline(outfile, line)) {
-        if (line != searchingNum) {
-            outfile_tmp << line;
+        if (removeSpacesFromString(line) == removeSpacesFromString(searchingNum)) {
+            found = true;
+        }
+
+        if (!found) {
+            outfile_tmp << line << "\n";
+        } else if (found && line == breakingPoint) {
+            found = false;
+            continue;
         }
     }
+
     outfile_tmp.close();
     outfile.close();
-
     remove("contacts.txt");
     rename("contacts_tmp.txt", "contacts.txt");
 
