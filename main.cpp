@@ -21,19 +21,16 @@ bool isSpecialChar(const char c) {
 }
 
 string removeSpacesFromString(string str) {
-    // To keep track of non-space character count
-    unsigned long long length = str.length();
-
-    // Traverse the given string. If current character is not space, then place it at index 'count++'
-    for (int i = 0; i < length; i++) {
-        if (str[i] == ' ') {
-            for (int j = i; j < length; j++) {
-                str[j] = str[j + 1];
-            }
-            length--;
+    string tmp_str;
+    // Iterate the given string. If current character is not space, then place it at tmp_str
+    for (int i = 0; i < str.length(); i++) {
+        if (str[i] != ' ') {
+            tmp_str += str[i];
+        }else{
+            continue;
         }
     }
-    return str;
+    return tmp_str;
 }
 
 bool validationPhone(const string &phone) {
@@ -161,8 +158,7 @@ int searchContact() {
 
     while (getline(outfile, line)) {
         counter++;
-        // comparing two strings without spaces
-        if (removeSpacesFromString(line) == removeSpacesFromString(searchingNum)) {
+        if (removeSpacesFromString(line) == removeSpacesFromString(searchingNum)) { // comparing two strings without spaces
             found = true;
             lineFound = counter;
         }
@@ -211,7 +207,7 @@ void listContacts() {
 void editContact() {
     int counter = 0, lineFound;
     bool found = false;
-    string editedFullInfo, phone, line;
+    string editedFullInfo, line;
     string breakingPoint = "==============================================================================";
 
     fstream outfile;
@@ -252,7 +248,7 @@ void editContact() {
 void deleteContact() {
     int counter = 0, lineFound;
     bool found = false;
-    string phone, line;
+    string line;
     string breakingPoint = "==============================================================================";
 
     fstream outfile;
@@ -289,18 +285,18 @@ void deleteContact() {
     cout << "\nContact has been successfully Deleted...\n";
 }
 
-void defineChoice(const string& choice) {
-    if (choice == "1"){
+void defineChoice(const string &choice) {
+    if (choice == "1") {
         saveToFile(addContact());
-    }else if (choice == "2"){
+    } else if (choice == "2") {
         listContacts();
-    }else if (choice == "3"){
+    } else if (choice == "3") {
         editContact();
-    }else if (choice == "4"){
+    } else if (choice == "4") {
         searchContact();
-    }else if (choice == "5"){
+    } else if (choice == "5") {
         deleteContact();
-    }else{
+    } else {
         cout << "Wrong key, please, choose one of the given\n";
     }
 }
