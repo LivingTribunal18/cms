@@ -37,7 +37,7 @@ string removeSpacesFromString(string str) {
 }
 
 bool validationPhone(const string &phone) {
-//    string allowedChars = "0123456789";
+//    string allowedChars = "12 340 567 89";
     for (int i = 0; i < phone.length(); i++) {
         if (phone[0] == '0') {
             return false;
@@ -289,16 +289,16 @@ void deleteContact() {
     cout << "\nContact has been successfully Deleted...\n";
 }
 
-void defineChoice(const char& choice) {
-    if (choice == '1'){
+void defineChoice(const string& choice) {
+    if (choice == "1"){
         saveToFile(addContact());
-    }else if (choice == '2'){
+    }else if (choice == "2"){
         listContacts();
-    }else if (choice == '3'){
+    }else if (choice == "3"){
         editContact();
-    }else if (choice == '4'){
+    }else if (choice == "4"){
         searchContact();
-    }else if (choice == '5'){
+    }else if (choice == "5"){
         deleteContact();
     }else{
         cout << "Wrong key, please, choose one of the given\n";
@@ -309,13 +309,13 @@ int main() {
     cout << "\n=========== Contact Management System ===========\n";
 
     while (true) {
-        char choice;
+        string choice;
         menuDisplay();
         cout << "Enter your choice:";
         cin >> choice;
         cin.ignore(); // deletes `\n` from input buffer
 
-        if (choice == '0') {
+        if (choice == "0") {
             return 0;
         } else {
             defineChoice(choice);
