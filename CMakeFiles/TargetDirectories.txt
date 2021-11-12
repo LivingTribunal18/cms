@@ -1,3 +1,0 @@
-C:/Users/nidavellir/CLionProjects/cms/cmake-build-debug/CMakeFiles/cms.dir
-C:/Users/nidavellir/CLionProjects/cms/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/nidavellir/CLionProjects/cms/cmake-build-debug/CMakeFiles/rebuild_cache.dir
