@@ -107,18 +107,16 @@ void saveToFile(const string &fullInfo) {
     cout << "\nContact has been successfully added! \n";
 }
 
-void addContact() {
+string addContact() {
     string phone, name, address, email;
     string fullInfo;
 
     cout << "Enter the contacts details\n";
-    cout << "Phone number (any country): +";
-    cin.ignore();// fixes premature end of input // cin adds “\n” to the buffer, because of this the execution may not be stopped for your input
+    cout << "Phone number (any country 123456789): +";
     getline(cin, phone);
 
     while (!validationPhone(phone)) {
         cout << "\nEnter the phone using ONLY digits, CORRECT country code: +";
-        cin.ignore();
         getline(cin, phone);
     }
 
@@ -126,57 +124,67 @@ void addContact() {
     getline(cin, name);
 
     cout << "Email:";
-//    cin.ignore();
     getline(cin, email);
 
     while (!validationEmail(email)) {
         cout << "\nEnter the email using correct format without spaces - instance@example.sample:";
         cin >> email;
+        cin.ignore(); // delete \n from buffer
     }
 
     cout << "Address:";
-
-//    cin.ignore();
     getline(cin, address);
 
     fullInfo += "Phone: +" + phone + "\nFull Name: " + name + "\nEmail: " + email + "\nAddress: " + address + "\n";
     fullInfo += "==============================================================================";
-    saveToFile(fullInfo);
+    return fullInfo;
+//    saveToFile(fullInfo);
 }
 
-void searchContact() {
-    string phone;
+int searchContact() {
+    int counter = 0, lineFound = 0;
     bool found = false;
     string breakingPoint = "==============================================================================";
-    string line, searchingNum = "Phone: +";
+    string phone, line, searchingNum = "Phone: +";
+
     fstream outfile;
     outfile.open("contacts.txt", ios::in);
 
-    cout << "\nPlease enter the contact phone number #: +";
-    cin.ignore();
+    cout << "\nPlease enter the contact phone number: +";
     getline(cin, phone);
+
+    while (!validationPhone(phone)) {
+        cout << "\nEnter the phone using ONLY digits, CORRECT country code: +";
+        getline(cin, phone);
+    }
+
     searchingNum += phone;
 
     while (getline(outfile, line)) {
+        counter++;
         // comparing two strings without spaces
         if (removeSpacesFromString(line) == removeSpacesFromString(searchingNum)) {
             found = true;
+            lineFound = counter;
         }
 
         if (found && line != breakingPoint) {
             cout << line << endl;
         } else if (found && line == breakingPoint) {
+            cout << line << endl;
             break;
         }
     }
+    outfile.close();
 
     if (!found) {
+        lineFound = 0;
         cout << "\nNo record found...\n";
+        return lineFound;
     }
 
-    outfile.close();
+    return lineFound;
 }
-
 
 void listContacts() {
     string breakingPoint = "==============================================================================";
@@ -201,52 +209,63 @@ void listContacts() {
 }
 
 void editContact() {
-    string phone;
-    string line, searchingNum = "Phone: +";
-    string breakingPoint = "==============================================================================";
+    int counter = 0, lineFound;
     bool found = false;
+    string editedFullInfo, phone, line, searchingNum = "Phone: +";
+    string breakingPoint = "==============================================================================";
 
     fstream outfile;
+    fstream outfile_tmp;
     outfile.open("contacts.txt", ios::in | ios::out);
+    outfile_tmp.open("contacts_tmp.txt", ios::out);
 
-    searchContact();
-//    deleteContact(contact);
-    addContact();
+    lineFound = searchContact();
+    cout << "\n";
+    if (!lineFound) {
+        cout << "\nContact Not Found...\n";
+        return;
+    }
+    editedFullInfo = addContact();
 
-// TODO deleting data of contact
-// TODO adding updated data of contact at the same line (or last)
+    while (getline(outfile, line)) {
+        counter++;
 
-    while(getline(outfile, line) && found == false){
-        if(removeSpacesFromString(line) == removeSpacesFromString(searchingNum)){
-
-//            cont.create_contact();
-//            int pos = -1 * sizeof(cont);
-//            fp.seekp(pos,ios::cur);
-//            fp.write((char*)&cont,sizeof(cont));
-
-            cout << "\n Contact Successfully Updated...\n";
+        if (counter == lineFound) {
+            outfile_tmp << editedFullInfo << "\n";
             found = true;
+        }
+
+        if (!found) {
+            outfile_tmp << line << "\n";
+        } else if (line == breakingPoint) {
+            found = false;
         }
     }
 
-    if (found == false) {
-        cout << "\nContact Not Found...\n";
-    }
+    cout << "\n Contact Successfully Updated...\n";
+
+    outfile_tmp.close();
     outfile.close();
+    remove("contacts.txt");
+    rename("contacts_tmp.txt", "contacts.txt");
 }
 
 
 void deleteContact() {
-    string phone;
-    string line, searchingNum = "Phone: +";
-    string breakingPoint = "==============================================================================";
+    string phone, line, searchingNum = "Phone: +";
     bool found = false;
+    string breakingPoint = "==============================================================================";
     fstream outfile;
     fstream outfile_tmp;
 
     cout << "\nPlease enter the contact phone number: +";
-    cin.ignore();
     getline(cin, phone);
+
+    while (!validationPhone(phone)) {
+        cout << "\nEnter the phone using ONLY digits, CORRECT country code: +";
+        getline(cin, phone);
+    }
+
     searchingNum += phone;
 
     outfile.open("contacts.txt", ios::in | ios::out);
@@ -259,7 +278,7 @@ void deleteContact() {
 
         if (!found) {
             outfile_tmp << line << "\n";
-        } else if (found && line == breakingPoint) {
+        } else if (line == breakingPoint) {
             found = false;
             continue;
         }
@@ -273,26 +292,19 @@ void deleteContact() {
     cout << "\nContact has been successfully Deleted...\n";
 }
 
-void defineChoice(char choice) {
-    switch (choice) {
-        case '1':
-            addContact();
-            break;
-        case '2':
-            listContacts();
-            break;
-        case '3':
-            editContact();
-            break;
-        case '4':
-            searchContact();
-            break;
-        case '5':
-            deleteContact();
-            break;
-        default:
-            cout << "Wrong number, please, choose one of a given\n";
-            break;
+void defineChoice(const char& choice) {
+    if (choice == '1'){
+        saveToFile(addContact());
+    }else if (choice == '2'){
+        listContacts();
+    }else if (choice == '3'){
+        editContact();
+    }else if (choice == '4'){
+        searchContact();
+    }else if (choice == '5'){
+        deleteContact();
+    }else{
+        cout << "Wrong key, please, choose one of the given\n";
     }
 }
 
@@ -302,16 +314,14 @@ int main() {
     while (true) {
         char choice;
         menuDisplay();
-        cout << "Enter your choice: ";
+        cout << "Enter your choice:";
         cin >> choice;
-        cout << "\n";
+        cin.ignore();
 
         if (choice == '0') {
-            exit(0);
+            return 0;
         } else {
             defineChoice(choice);
         }
     }
-
-    return 0;
 }
