@@ -87,8 +87,7 @@ bool validationEmail(const string &email) {
 //bool validationAddress(string address){}
 
 void menuDisplay() {
-    cout << "\n";
-    cout << "=============== MENU ===============\n";
+    cout << "\n=============== MENU ===============\n";
     cout << "[1] Add Contact\n";
     cout << "[2] List Contacts\n";
     cout << "[3] Edit Contact\n";
@@ -179,7 +178,7 @@ int searchContact() {
 
     if (!found) {
         lineFound = 0;
-        cout << "\nNo record found...\n";
+        cout << "\nNo contact found...\n";
         return lineFound;
     }
 
@@ -187,9 +186,10 @@ int searchContact() {
 }
 
 void listContacts() {
+    int lines = 0;
     string breakingPoint = "==============================================================================";
     string listContacts;
-    int lines = 0;
+
     ifstream outfile;
     outfile.open("contacts.txt", ios::in);
 
@@ -202,7 +202,7 @@ void listContacts() {
     }
 
     if (lines <= 0) {
-        cout << "No contacts found!\n";
+        cout << "No contacts found...\n";
     }
 
     outfile.close();
@@ -211,7 +211,7 @@ void listContacts() {
 void editContact() {
     int counter = 0, lineFound;
     bool found = false;
-    string editedFullInfo, phone, line, searchingNum = "Phone: +";
+    string editedFullInfo, phone, line;
     string breakingPoint = "==============================================================================";
 
     fstream outfile;
@@ -222,7 +222,6 @@ void editContact() {
     lineFound = searchContact();
     cout << "\n";
     if (!lineFound) {
-        cout << "\nContact Not Found...\n";
         return;
     }
     editedFullInfo = addContact();
@@ -250,29 +249,27 @@ void editContact() {
     rename("contacts_tmp.txt", "contacts.txt");
 }
 
-
 void deleteContact() {
-    string phone, line, searchingNum = "Phone: +";
+    int counter = 0, lineFound;
     bool found = false;
+    string phone, line;
     string breakingPoint = "==============================================================================";
+
     fstream outfile;
     fstream outfile_tmp;
 
-    cout << "\nPlease enter the contact phone number: +";
-    getline(cin, phone);
-
-    while (!validationPhone(phone)) {
-        cout << "\nEnter the phone using ONLY digits, CORRECT country code: +";
-        getline(cin, phone);
+    lineFound = searchContact();
+    cout << "\n";
+    if (!lineFound) {
+        return;
     }
-
-    searchingNum += phone;
 
     outfile.open("contacts.txt", ios::in | ios::out);
     outfile_tmp.open("contacts_tmp.txt", ios::out);
 
     while (getline(outfile, line)) {
-        if (removeSpacesFromString(line) == removeSpacesFromString(searchingNum)) {
+        counter++;
+        if (counter == lineFound) {
             found = true;
         }
 
@@ -316,7 +313,7 @@ int main() {
         menuDisplay();
         cout << "Enter your choice:";
         cin >> choice;
-        cin.ignore();
+        cin.ignore(); // deletes `\n` from input buffer
 
         if (choice == '0') {
             return 0;
