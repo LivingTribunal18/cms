@@ -1,8 +1,3 @@
-Phone: +1234567890
-Full Name: Juicy Boy
-Email: juicy@gmail.com
-Address: instasamka
-==============================================================================
 Phone: +382873287
 Full Name: not empty name now
 Email: now@gmail.com
@@ -27,9 +22,4 @@ Phone: +998 90 974 2089
 Full Name: Elena
 Email: e.bondarenko@mail.ru
 Address: Sarakul Sarakul
-==============================================================================
-Phone: +4873784 83478
-Full Name: New names birth
-Email: sdfs@gmail.com
-Address: avenue 56 street2
 ==============================================================================

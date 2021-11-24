@@ -21,8 +21,7 @@ bool isSpecialChar(const char c) {
 }
 
 //function to remove all spaces from string
-string
-removeSpacesFromString(const string &str) { // using constant references to put string into function without copying
+string removeSpacesFromString(const string &str) { // using constant references to put string into function without copying
     string tmp_str;
     // Iterate through the given string
     for (int i = 0; i < str.length(); i++) {
@@ -60,7 +59,7 @@ bool validationPhone(const string &phone) {
 //validate email for correctness
 bool validationEmail(const string &email) {
     // example@any.domen
-    int at = -1, dot = -1; // Variable to store position of at - (@) and dot - (.)
+    int at = -1, dot = -1, atCounter = 0; // Variable to store position of at - (@) and dot - (.)
 
     if (email.length() < 5) {
         return false;
@@ -70,6 +69,7 @@ bool validationEmail(const string &email) {
     for (int i = 0; i < email.length(); i++) {
         if (email[i] == '@') {
             at = i;
+            atCounter += 1;
         } else if (email[i] == '.') {
             dot = i;
         } else if (!isChar(email[i]) && !isDigit(email[i]) && !isSpecialChar(email[i])) {
@@ -86,6 +86,11 @@ bool validationEmail(const string &email) {
     if (at == -1 || dot == -1) {
         return false;
     }
+
+    // if there is more than one at(@)
+    if (atCounter > 1){
+        return false;
+    }
     // If dot is present before at(@)
     if (at > dot) {
         return false;
@@ -94,9 +99,6 @@ bool validationEmail(const string &email) {
     // If dot(.) is present at the end
     return dot < (email.length() - 1);
 }
-
-//bool validationName(string name) {}
-//bool validationAddress(string address){}
 
 // function to display menu with commands for user
 void menuDisplay() {
@@ -176,8 +178,7 @@ int searchContact() {
 
     while (getline(outfile, line)) {
         counter++;
-        if (removeSpacesFromString(line) ==
-            removeSpacesFromString(searchingNum)) { // comparing two strings without spaces
+        if (removeSpacesFromString(line) == removeSpacesFromString(searchingNum)) { // comparing two strings without spaces
             found = true;
             lineFound = counter; // get the line number where contact wa found
         }
