@@ -38,16 +38,17 @@ string removeSpacesFromString(const string &str) { // using constant references 
 //validate phone number
 bool validationPhone(const string &phone) {
 //    string allowedChars = "12 340 567 89";
-    if (phone.length() > 15 || phone.length() < 7) {
+    string cleanedPhone = removeSpacesFromString(phone);
+    if (cleanedPhone.length() < 7) {
         return false;
     } else {
-        for (int i = 0; i < phone.length(); i++) {
+        for (int i = 0; i < cleanedPhone.length(); i++) {
             // wrong country code
-            if (phone[0] == '0') {
+            if (cleanedPhone[0] == '0') {
                 return false;
             } else {
                 // if the character is not digit
-                if (!isDigit(phone[i]) && phone[i] != ' ') {
+                if (!isDigit(cleanedPhone[i]) && cleanedPhone[i] != ' ') {
                     return false;
                 }
             }
@@ -91,6 +92,11 @@ bool validationEmail(const string &email) {
     if (atCounter > 1){
         return false;
     }
+
+    //if dot(.) is next to (@) without email domain
+    if (dot - at == 1){
+        return false;
+    }
     // If dot is present before at(@)
     if (at > dot) {
         return false;
@@ -127,7 +133,7 @@ string addContact() {
     string phone, name, address, email;
     string fullInfo;
 
-    cout << "Enter the contacts details\n";
+    cout << "\nEnter the contacts details\n";
 
     cout << "Phone number (any country 123456789): +";
     getline(cin, phone);
@@ -212,6 +218,7 @@ void listContacts() {
     ifstream outfile;
     outfile.open("contacts.txt", ios::in); // open file for read only
 
+    cout << "\n";
     while (getline(outfile, listContacts)) {// read lines from file
         lines++;
         cout << listContacts << endl;
@@ -325,7 +332,7 @@ void defineChoice(const string &choice) {
     } else if (choice == "5") {
         deleteContact();
     } else {
-        cout << "Wrong key, please, choose one of the given\n";
+        cout << "\nWrong key, please, choose one of the given\n";
     }
 }
 
